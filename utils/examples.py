@@ -36,20 +36,19 @@ SJF_EXAMPLES = namedtuple("Examples", ['example1', 'example2', 'example3', 'exam
 
 FCFS_EXAMPLES = namedtuple("Examples", ['example1', 'example2'])(
     example1=[
-        Process(name="P1", arrival_time=0, burst_time=15),
-        Process(name="P2", arrival_time=2, burst_time=6),
-        Process(name="P3", arrival_time=3, burst_time=7),
-        Process(name="P4", arrival_time=5, burst_time=5),
+        Process(name="P1", arrival_time=0, burst_time=15, size=200),
+        Process(name="P2", arrival_time=2, burst_time=6, size=100),
+        Process(name="P3", arrival_time=3, burst_time=7, size=150),
+        Process(name="P4", arrival_time=5, burst_time=5, size=250),
     ],
     example2=[
-        Process(name="A", arrival_time=0, burst_time=9),
-        Process(name="B", arrival_time=1, burst_time=5),
-        Process(name="C", arrival_time=2, burst_time=2),
-        Process(name="D", arrival_time=3, burst_time=6),
-        Process(name="E", arrival_time=4, burst_time=8),
+        Process(name="A", arrival_time=0, burst_time=9, size=180),
+        Process(name="B", arrival_time=1, burst_time=5, size=120),
+        Process(name="C", arrival_time=2, burst_time=2, size=90),
+        Process(name="D", arrival_time=3, burst_time=6, size=200),
+        Process(name="E", arrival_time=4, burst_time=8, size=250),
     ],
 )
-
 ROUND_ROBIN_EXAMPLES = namedtuple("Examples", ['example1', 'example2'])(
     example1=namedtuple('Example1', ['processes', 'time_slice'])(
         processes=[
