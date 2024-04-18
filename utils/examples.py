@@ -4,10 +4,9 @@ from collections import namedtuple
 SJF_EXAMPLES = namedtuple("Examples", ['example1', 'example2', 'example3', 'example4'])(
     
     example1=[
-        Process(name="P1", arrival_time=0, burst_time=7),
-        Process(name="P2", arrival_time=1, burst_time=5),
-        Process(name="P3", arrival_time=3, burst_time=2),
-        Process(name="P4", arrival_time=4, burst_time=3),
+        Process(name="P2", arrival_time=0, burst_time=5),
+        Process(name="P1", arrival_time=1, burst_time=10),
+        Process(name="P3", arrival_time=3, burst_time=15),
     ],
 
     example2=[
