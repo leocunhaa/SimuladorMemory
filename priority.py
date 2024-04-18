@@ -12,13 +12,24 @@ def priority(processes: List[Process]) -> None:
     gantt_chart = []
     executed_queue = []
     current_time = 0
-    while processes:
-        arrived_processes = list(filter(lambda p: p.arrival_time <= current_time, processes))
-        arrived_processes.sort(key=lambda p: p.priority)
 
+    # Log do próximo processo escolhido
+    def log_next_process(process):
+        logging.debug(f"Próximo processo escolhido: {process.name} - Prioridade: {process.priority}")
+        logging.debug(f"Fila no momento da escolha: {[p.name for p in processes]}")
+
+    while processes:
+        # Ordena os processos com base na prioridade e na chegada
+        arrived_processes = sorted(processes, key=lambda p: (p.priority, p.arrival_time))
+        
+        # Pega o próximo processo da fila
         process = arrived_processes[0]
         processes.remove(process)
-        
+
+        # Log do próximo processo escolhido
+        log_next_process(process)
+
+        # Executa o processo
         current_time = max(current_time, process.arrival_time)
         process.waiting_time = max(0, current_time - process.arrival_time)
         process.turnaround_time = process.burst_time + process.waiting_time
@@ -29,9 +40,7 @@ def priority(processes: List[Process]) -> None:
     print_gantt_chart(gantt_chart)
     print_table(executed_queue, show_priority=True)
 
-
 if __name__ == '__main__':
-
     print("-------------------------")
     logging.debug("Detalhes do teste")
     logging.info("Iniciando teste")
@@ -40,8 +49,5 @@ if __name__ == '__main__':
     priority(PRIORITY_EXAMPLES.example2)
 
     print("-------------------------")
-    logging.info("Teste concluido com sucesso!")
+    logging.info("Teste concluído com sucesso!")
     print("-------------------------")
-
-
-
