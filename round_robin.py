@@ -1,3 +1,4 @@
+import time
 from typing import List
 
 from utils.examples import ROUND_ROBIN_EXAMPLES
@@ -9,6 +10,66 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 # ROUND ROBIN FINALIZADO COM SUCESSO
+
+class CPU:
+    def __init__(self, num_cores=4, instr_per_core=7, clock=1000):
+        self.num_cores = num_cores
+        self.instr_per_core = instr_per_core
+        self.clock = clock
+
+    def execute(self, process):
+        print(f"Executing process {process.name} on CPU")
+        remaining_instructions = process.remaining_instructions
+        while remaining_instructions > 0:
+            # Executa instruções até atingir a capacidade do núcleo ou acabarem as instruções do processo
+            for core in range(self.num_cores):
+                if remaining_instructions > 0:
+                    instructions_to_execute = min(remaining_instructions, self.instr_per_core)
+                    print(f"Core {core + 1}: Executing {instructions_to_execute} instructions")
+                    remaining_instructions -= instructions_to_execute
+            time.sleep(self.clock / 1000)  # Aguarda o tempo do clock
+        print(f"Process {process.name} completed execution")
+
+class MemoryManager:
+    def __init__(self, physical_memory_size=256, page_size=4):
+        self.physical_memory_size = physical_memory_size  # Tamanho da memória física em KB
+        self.page_size = page_size  # Tamanho da página de paginação em KB
+        self.page_table = {}  # Tabela de páginas
+
+    def add_process_to_memory(self, process):
+        # Verifica se há espaço suficiente na memória para o processo
+        required_memory = process.size
+        if required_memory > self.physical_memory_size:
+            print(f"Error: Not enough physical memory for process {process.name}")
+            return False
+
+        # Calcula o número de páginas necessárias para o processo
+        num_pages = required_memory // self.page_size
+        if required_memory % self.page_size != 0:
+            num_pages += 1
+
+        # Verifica se há espaço suficiente na memória para todas as páginas do processo
+        if len(self.page_table) + num_pages > self.physical_memory_size // self.page_size:
+            print(f"Error: Not enough physical memory for process {process.name}")
+            return False
+
+        # Aloca as páginas do processo na memória
+        for i in range(num_pages):
+            page_number = len(self.page_table) + i
+            self.page_table[page_number] = process.name
+
+        print(f"Added process {process.name} to memory")
+        return True
+
+    def is_memory_full(self):
+        return len(self.page_table) == self.physical_memory_size // self.page_size
+
+    def __str__(self):
+        return f"Physical Memory Size: {self.physical_memory_size} KB, Page Size: {self.page_size} KB"
+
+
+# Definindo o quantum para o Round Robin como 3000ms
+ROUND_ROBIN_QUANTUM = 3000
 
 def round_robin(processes: List[Process], time_slice: int, quantum: int, clock: int) -> None:
     current_time = 0
