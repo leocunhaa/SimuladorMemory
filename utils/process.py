@@ -11,8 +11,8 @@ class Process:
     turnaround_time: int = field(init=False, default=0)
     remaining_time: int = field(init=False, default=0, repr=True)
     next_arrival_time: int = field(init=False, default=0, repr=False)
+    size: int = field(init=True, default=0)  # Adicionando tamanho do processo
 
     def __post_init__(self):
         self.remaining_time = self.burst_time
         self.next_arrival_time = self.arrival_time
-
